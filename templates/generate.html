@@ -1,0 +1,19 @@
+{% extends 'layout.html' %}
+{% block title %}Generate{% endblock %}
+{% block body %}
+<div class="jumbotron">
+    <div class="card border-primary mb-3" style="max-width: 20rem; display: inline-block;">
+        <div class="card-body">
+            <h4 class="card-title">Generate Report</h4>
+            <p class="card-text">Generates release report for use in a journal entry</p>
+            <p class="lead">
+                <a class="btn btn-primary btn-lg" href="/ups/generate" role="button">Generate UPS Release Data</a>
+            </p>
+            <p class="lead">
+                <a class="btn btn-primary btn-lg" href="/givens/generate" role="button">Generate Givens Release Data</a>
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
