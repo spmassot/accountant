@@ -32,7 +32,7 @@ def import_data_too(in_df, conn, schema, file_name):
     '''Tries a bulk insert of a dataframe, with recursion in the case of errors'''
     def _recursive_insert(conn, d_frame, schem, err_count=0, all_errors=[]):
         try:
-            d_frame.to_sql('invoice', conn, if_exists='append', index=True, dtype=schem)  # should variable-ize table name
+            d_frame.to_sql('invoice', conn, if_exists='append', index=True, dtype=schem)
         except BaseException as e:
             if len(d_frame) == 1:
                 err_count += 1

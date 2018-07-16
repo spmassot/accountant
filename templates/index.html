@@ -2,32 +2,7 @@
 {% block title %}Home{% endblock %}
 {% block body %}
 <div class="jumbotron">
-    <div class="card border-primary mb-3" style="max-width: 20rem; display: inline-block;">
-        <div class="card-body">
-            <h4 class="card-title">Load Data</h4>
-            <p class="card-text">Loads flat files into the application database</p>
-            <p class="lead">
-                <a class="btn btn-primary btn-lg" href="/ups/load" role="button">Load UPS Data</a>
-            </p>
-            <p class="lead">
-                <a class="btn btn-primary btn-lg" href="/givens/load" role="button">Load Givens Data</a>
-            </p>
-            <p class="lead">
-                <a class="btn btn-primary btn-lg" href="/freight/load" role="button">Load Freight Data</a>
-            </p>
-        </div>
-    </div>
-    <div class="card border-primary mb-3" style="max-width: 20rem; display: inline-block;">
-        <div class="card-body">
-            <h4 class="card-title">Generate Report</h4>
-            <p class="card-text">Generates release report for use in a journal entry</p>
-            <p class="lead">
-                <a class="btn btn-primary btn-lg" href="/ups/generate" role="button">Generate UPS Release Data</a>
-            </p>
-            <p class="lead">
-                <a class="btn btn-primary btn-lg" href="/givens/generate" role="button">Generate Givens Release Data</a>
-            </p>
-        </div>
-    </div>
+    {% include "load.html" %}
+    {% include "generate.html" %}
 </div>
 {% endblock %}

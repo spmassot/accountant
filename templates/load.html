@@ -1,22 +1,21 @@
-{% extends 'layout.html' %}
-{% block title %}Load Data{% endblock %}
-{% block body %}
-<div class="jumbotron">
-    <div class="card border-primary mb-3" style="max-width: 20rem; display: inline-block;">
-        <div class="card-body">
-            <h4 class="card-title">Load Data</h4>
-            <p class="card-text">Loads flat files into the application database</p>
-            <p class="lead">
-                <a class="btn btn-primary btn-lg" href="/ups/load" role="button">Load UPS Data</a>
-            </p>
-            <p class="lead">
-                <a class="btn btn-primary btn-lg" href="/givens/load" role="button">Load Givens Data</a>
-            </p>
-            <p class="lead">
-                <a class="btn btn-primary btn-lg" href="/freight/load" role="button">Load Freight Data</a>
-            </p>
-        </div>
+<div class="card border-primary mb-3" style="max-width: 20rem; display: inline-block;">
+    <div class="card-body">
+        <h4 class="card-title">Load Data</h4>
+        <p class="card-text">Loads flat files into the application database</p>
+        <form action="/load/new" enctype="multipart/form-data" method="post">
+            <div class="form-group">
+                <select class="custom-select" name="file_type">
+                    <option value="givens">Givens Data</option>
+                    <option value="ups">UPS Data</option>
+                    <option value="freight">Freight Data</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <input type="file" class="form-control-file" name="input_files" multiple>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary btn-lg" role="button">Load Data</submit>
+            </div>
+        </form>
     </div>
 </div>
-{% endblock %}
-
