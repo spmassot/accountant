@@ -11,8 +11,6 @@ def all_buckets():
 
 
 def initialize_bucket(bucket_to_initialize):
-    print(all_buckets())
-    print(bucket_to_initialize)
     if bucket_to_initialize not in all_buckets():
         client().create_bucket(
             ACL='private',
