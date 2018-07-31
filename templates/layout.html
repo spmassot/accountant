@@ -3,10 +3,18 @@
   <head>
     <link href="https://stackpath.bootstrapcdn.com/bootswatch/4.1.1/simplex/bootstrap.min.css" rel="stylesheet" integrity="sha384-+2gfL/IqcUKKHvrRK8wGmdnTFnce2ph1LXymULY+74y6VrsdZv9yPjQITajHenD9" crossorigin="anonymous">
     <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
+
     <title>Freight - {% block title %}{% endblock %}</title>
   </head>
+  {% with messages = get_flashed_messages() %}
+  {% if messages %}
+      {% for message in messages %}
+      <div class="alert alert-warning">{{ message }}</div>
+      {% endfor %}
+  {% endif %}
+  {% endwith %}
   <body id="body-main">
-    {% include 'navbar.html' %}
-    {% block body %}{% endblock %}
+      {% include 'navbar.html' %}
+      {% block body %}{% endblock %}
   </body>
 </html>

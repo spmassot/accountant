@@ -5,4 +5,3 @@ routes = Blueprint('generate', __name__)
 @routes.route('/generate')
 def index():
     return render_template('generate.html')
-

@@ -1,7 +1,6 @@
-from flask import Blueprint, redirect, render_template, request
+from flask import Blueprint, redirect, request
 from filer import prep_files
 from interfaces import s3
-
 
 routes = Blueprint('load', __name__, url_prefix='/load')
 
