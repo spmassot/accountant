@@ -1,5 +1,6 @@
 import boto3
 import pickle
+from os import getenv
 
 
 def client():
@@ -20,5 +21,21 @@ def initialize_bucket(bucket_to_initialize):
         )
 
 
-def load(thing):
+def upload(thing):
     client().upload_fileobj(pickle.dumps(thing))
+
+
+def create_folder(folder_name):
+    client().put_object(
+        Bucket=getenv('FILE_BUCKET'),
+        Body='',
+        Key=folder_name+'/'
+    )
+
+
+def put_file_in_folder(file_name, file_data, folder_name):
+    client().put_object(
+        Bucket=getenv('FILE_BUCKET'),
+        Body=file_data,
+        Key=folder_name+'/'+file_name
+    )

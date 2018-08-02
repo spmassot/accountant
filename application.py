@@ -1,4 +1,5 @@
 from dotenv import load_dotenv
+from datetime import timedelta
 from flask import (
     Flask, session, render_template, request, flash, redirect, url_for
 )
@@ -14,6 +15,8 @@ from interfaces import s3
 load_dotenv()
 application = Flask(__name__)
 application.secret_key = getenv('AUTH_KEY')
+session_timeout = int(getenv('SESSION_TIMEOUT_IN_MINUTES'))
+application.permanent_session_lifetime = timedelta(minutes=session_timeout)
 s3.initialize_bucket(getenv('FILE_BUCKET'))
 user.initialize_users()
 
@@ -35,6 +38,7 @@ def log(msg):
 def authorize(username, password):
     if not user.is_valid_login(username, password):
         return False
+    session.permanent = True
     session['username'] = username
     return True
 

@@ -32,20 +32,30 @@ def prep_givens_files(files):
         sheets = [x for x in xls.sheet_names() if reg.match(x)]
         adj_sheets = [x for x in sheets if adjustments.match(x)]
         flat_sheets = [x for x in sheets if x not in adj_sheets]
-        flat_frames = [pd.read_excel(f,
-                                     sheetname=mtch,
-                                     header=7,
-                                     converters={"ORDER #'s":str}
-                                    ).dropna(thresh=12) for mtch in flat_sheets]
-        adj_frames = [pd.read_excel(f,
-                                    sheetname=mtch,
-                                    header=7,
-                                    converters={"ORDER #'s":str}
-                                   ).dropna(thresh=4) for mtch in adj_sheets]
+        flat_frames = [
+            pd.read_excel(
+                f,
+                sheetname=mtch,
+                header=7,
+                converters={"ORDER #'s":str}
+            ).dropna(thresh=12)
+            for mtch in flat_sheets
+        ]
+        adj_frames = [
+            pd.read_excel(
+                f,
+                sheetname=mtch,
+                header=7,
+                converters={"ORDER #'s":str}
+            ).dropna(thresh=4)
+            for mtch in adj_sheets
+        ]
         return (
-                pd.concat(flat_frames, ignore_index=True),
+            pd.concat(flat_frames, ignore_index=True),
             pd.concat(adj_frmaes, ignore_index=True)
         )
+
+
     sought = re.compile(r'^(brampton|chesapeake|plainfield|reno|hope).*', re.I)
     flat_files = []
     adjustments = []
