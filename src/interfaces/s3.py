@@ -22,7 +22,7 @@ def initialize_bucket(bucket_to_initialize):
 
 
 def upload(thing):
-    client().upload_fileobj(pickle.dumps(thing))
+    return client().upload_fileobj(pickle.dumps(thing))
 
 
 def create_folder(folder_name):

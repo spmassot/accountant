@@ -8,8 +8,9 @@ import logging
 import logging.handlers
 
 from views import index, load, generate
-import user
-from interfaces import s3
+import src.user
+from src.interfaces import s3
+from src.db import Database
 
 
 load_dotenv()
@@ -20,6 +21,7 @@ application.permanent_session_lifetime = timedelta(minutes=session_timeout)
 s3.initialize_bucket(getenv('FILE_BUCKET'))
 user.initialize_users()
 
+# Database.initialize()
 
 modules = [index, load, generate]
 for module in modules:
