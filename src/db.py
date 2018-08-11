@@ -5,7 +5,7 @@ from os import listdir, getenv
 class Database:
     user = getenv('RDS_USERNAME')
     password = getenv('RDS_PASSWORD')
-    host = getenv('RDS_HOST')
+    host = getenv('RDS_HOSTNAME')
     port = getenv('RDS_PORT')
     dbname = getenv('RDS_DB_NAME')
 
