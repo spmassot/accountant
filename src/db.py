@@ -31,7 +31,6 @@ class Database:
         for table in listdir('table_schemas'):
             with open(f'./table_schemas/{table}') as schema:
                 cls.engine.execute(schema.read())
-        cls.connection.commit()
 
     @classmethod
     def insert_into_table(cls, table, record):
@@ -39,7 +38,6 @@ class Database:
         e.execute(
             f'''INSERT INTO {table} ({tuple(record.keys())}) VALUES ({tuple(record.values())})'''
         )
-        e.commit()
 
     @classmethod
     def update_table(cls, table, id_key, id_value, update_key, update_value):
@@ -47,4 +45,3 @@ class Database:
         e.execute(
             f'''UPDATE {table} SET {update_key} = {update_value} WHERE {id_key} = {id_value}'''
         )
-        e.commit()
