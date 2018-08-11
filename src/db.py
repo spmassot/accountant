@@ -28,11 +28,10 @@ class Database:
         )
         cls.engine.execute(f'CREATE DATABASE IF NOT EXISTS {cls.dbname}')
         cls.engine.execute('USE {cls.dbname}')
-        # for table in listdir('table_schemas'):
-        #     with open(f'./table_schemas/{table}') as schema:
-        #         c.execute(schema.read())
-        # cls.connection.commit()
-        cls.engine.execute('select 1')
+        for table in listdir('table_schemas'):
+            with open(f'./table_schemas/{table}') as schema:
+                c.execute(schema.read())
+        cls.connection.commit()
 
     @classmethod
     def insert_into_table(cls, table, record):
