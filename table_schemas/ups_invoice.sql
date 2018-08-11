@@ -1,4 +1,4 @@
 CREATE TABLE IF NOT EXISTS ups_invoice (
-	name TEXT UNIQUE,
+	name TEXT,
 	inserted_date DATE
 )

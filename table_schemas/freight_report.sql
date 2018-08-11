@@ -1,4 +1,4 @@
 CREATE TABLE IF NOT EXISTS freight_report (
-	name TEXT UNIQUE,
+	name TEXT,
 	inserted_date DATE
 )
