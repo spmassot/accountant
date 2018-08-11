@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS givens_adjustment_row (
 	order_numbers TEXT,
 	ship_date DATE,
 	carrier TEXT,
-	total MONEY,
+	total DECIMAL(12, 2),
 	company TEXT,
 	line_of_business TEXT
 )

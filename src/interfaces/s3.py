@@ -39,3 +39,11 @@ def put_file_in_folder(file_name, file_data, folder_name):
         Body=file_data,
         Key=folder_name+'/'+file_name
     )
+
+
+def list_objects():
+    response = client().list_objects(Bucket=getenv('FILE_BUCKET')).get('Contents')
+    if response:
+        return [x['Key']  for x in response]
+    else:
+        return []

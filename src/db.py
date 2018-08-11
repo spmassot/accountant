@@ -1,43 +1,51 @@
-import psycopg2
+from sqlalchemy import create_engine
 from os import listdir, getenv
 
 
 class Database:
-    connection = None
-    connection_args = dict(
-        dbname=getenv(f"RDS_DB_NAME"),
-        user=getenv(f"RDS_USERNAME"),
-        password=getenv(f"RDS_PASSWORD"),
-        host=getenv(f"RDS_HOST"),
-        port=getenv(f"RDS_PORT")
-    )
+    user = getenv('RDS_USERNAME')
+    password = getenv('RDS_PASSWORD')
+    host = getenv('RDS_HOST')
+    port = getenv('RDS_PORT')
+    dbname = getenv('RDS_DB_NAME')
+
+    engine = None
 
     @classmethod
-    def get_cursor(cls):
-        if not cls.connection:
-            cls.connection = psycopg2.connect(**cls.connection_args)
-        return cls.connection.cursor()
+    def get_engine(cls):
+        if not cls.engine:
+            cls.engine = create_engine(
+                f'mysql+pymysql://{cls.user}:{cls.password}@{cls.host}:{cls.port}/{cls.dbname}',
+                pool_pre_ping=True
+            )
+        return cls.engine
 
     @classmethod
     def initialize(cls):
-        c = cls.get_cursor()
-        for table in listdir('table_schemas'):
-            with open(f'./table_schemas/{table}') as schema:
-                c.execute(schema.read())
-        cls.connection.commit()
+        cls.engine = create_engine(
+            f'mysql+pymysql://{cls.user}:{cls.password}@{cls.host}:{cls.port}',
+            pool_pre_ping=True
+        )
+        cls.engine.execute(f'CREATE DATABASE IF NOT EXISTS {cls.dbname}')
+        cls.engine.execute('USE {cls.dbname}')
+        # for table in listdir('table_schemas'):
+        #     with open(f'./table_schemas/{table}') as schema:
+        #         c.execute(schema.read())
+        # cls.connection.commit()
+        cls.engine.execute('select 1')
 
     @classmethod
     def insert_into_table(cls, table, record):
-        c = cls.get_cursor()
-        c.execute(
+        e = cls.get_engine()
+        e.execute(
             f'''INSERT INTO {table} ({tuple(record.keys())}) VALUES ({tuple(record.values())})'''
         )
-        c.commit()
+        e.commit()
 
     @classmethod
     def update_table(cls, table, id_key, id_value, update_key, update_value):
-        c = cls.get_cursor()
-        c.execute(
+        e = cls.get_engine()
+        e.execute(
             f'''UPDATE {table} SET {update_key} = {update_value} WHERE {id_key} = {id_value}'''
         )
-        c.commit()
+        e.commit()

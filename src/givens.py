@@ -1,54 +1,11 @@
-from ipywidgets import Text, DatePicker, HBox, VBox
-from IPython.display import display
 from itertools import chain
 import pandas as pd
-import xlrd
-import os
 import re
-
-start_date = DatePicker()
-end_date = DatePicker()
-month = Text(placeholder='month')
-widgies = VBox([HBox([start_date,end_date]),month])
-display(widgies)
-
-path_name = '/mnt/c/Users/Sean/Desktop/AudioVox/Givens/'
-files = [x for x in os.listdir(path_name)]
-all_dfs = []
-all_adj_dfs = []
-for fil_ in files:
-    print(fil_)
-    xls = xlrd.open_workbook(path_name+fil_, on_demand=True)
-    main_sought = ['Brampton','Chesapeake','Plainfield','Reno','Hope']
-    adj_sought = [x+' Adjustments' for x in main_sought]
-    matched = [x for x in xls.sheet_names() if x in main_sought]
-    print(matched)
-    adj_matched = [x for x in xls.sheet_names() if x in adj_sought]
-    print(adj_matched)
-    list_frames = [pd.read_excel(
-            path_name+fil_,
-            sheetname=mtch,
-            header=7,
-            converters={"ORDER #'s":str}
-        ).dropna(thresh=12) for mtch in matched]
-    list_adj_frames = [pd.read_excel(
-            path_name+fil_,
-            sheetname=mtch,
-            header=7,
-            converters={"ORDER #'s":str}
-        ).dropna(thresh=4) for mtch in adj_matched]
-
-    new_df = pd.concat(list_frames, ignore_index=True)
-    new_adj_df = pd.concat(list_adj_frames, ignore_index=True)
-
-    all_dfs.append(new_df)
-    all_adj_dfs.append(new_adj_df)
 
 big_df = pd.concat(all_dfs, ignore_index=True)
 big_adj_df = pd.concat(all_adj_dfs, ignore_index=True)
 big_df = big_df[
-    (str(start_date.value) <= big_df['SHIP DATE']
-    ) & (str(end_date.value) >= big_df['SHIP DATE'])
+    (str(start_date.value) <= big_df['SHIP DATE']) & (str(end_date.value) >= big_df['SHIP DATE'])
 ]
 big_df.to_csv(f'/mnt/c/Users/Sean/Desktop/AudioVox/givens_{month.value}.csv')
 big_adj_df.to_csv(f'/mnt/c/Users/Sean/Desktop/AudioVox/givens_adj_{month.value}.csv')

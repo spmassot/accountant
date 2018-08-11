@@ -14,5 +14,5 @@ CREATE TABLE IF NOT EXISTS ups_invoice_row (
 	package_reference_number_3 TEXT,
 	package_reference_number_4 TEXT,
 	package_reference_number_5 TEXT,
-	net_amount MONEY
+	net_amount DECIMAL(12, 2)
 )

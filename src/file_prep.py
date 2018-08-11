@@ -1,4 +1,6 @@
 import pandas as pd
+from xlsxmetadata.metadata import get_sheet_names
+from io import BytesIO
 import xlrd
 import re
 
@@ -7,22 +9,23 @@ def prep_file(ifile, file_type):
     return {
         'ups': prep_ups_file,
         'givens': prep_givens_file,
-        'freight': prep_freight_file
+        'freight': prep_freight_report
     }.get(file_type)(ifile)
 
 
 def prep_ups_file(ups_file):
 
-    xls = xlrd.open_workbook(ups_file, on_demand=True)
+    sheet_names = get_sheet_names(BytesIO(ups_file.read()))
+    ups_file.seek(0)
     sought = re.compile(r'^\s*accruals*\s*$', re.I)
-    matched = [x for x in xls.sheet_names() if reg.match(x)][0]
+    matched = [x for x in sheet_names if sought.match(x)][0]
     df = pd.read_excel(ups_file, sheet_name=matched, usecols=55)
 
     keep_columns = ups_columns()
-    df = df[keep_columns.keys()]
+    df = df[[*list(keep_columns.keys())]]
     df = df.rename(keep_columns, axis='columns')
 
-    return df.to_dict(orient='records')
+    return df.to_json(orient='records')
 
 
 def ups_columns():
@@ -70,16 +73,16 @@ def prep_givens_file(givens_file):
         if name in flat_names:
             df = df.dropna(thresh=12)
             df['location'] = name
-            df = df[[keep_columns.keys()]]
+            df = df[[*list(keep_columns.keys())]]
             df = df.rename(keep_columns, axis='columns')
-            flat_frames.extend(df.to_dict(orient='records'))
+            flat_frames.extend(df.to_json(orient='records'))
 
         elif name in adj_names:
             df = df.dropna(thresh=4)
             df['location'] = name.replace('Adjustments','').strip()
-            df = df[[keep_columns.keys()]]
+            df = df[[*list(keep_columns.keys())]]
             df = df.rename(keep_columns, axis='columns')
-            adj_frames.extend(df.to_dict(orient='records'))
+            adj_frames.extend(df.to_json(orient='records'))
 
     return (flat_frames, adj_frames)
 
@@ -101,11 +104,11 @@ def prep_freight_report(freight_report):
 
     records = []
     for k, df in frames.items():
-        df = df[[keep_columns.keys()]]
+        df = df[[*list(keep_columns.keys())]]
         df.rename(keep_columns, axis='columns')
-        records.extend(df.to_dict(orient='records'))
+        records.append(df)
 
-    return records
+    return pd.concat(records).to_json(orient='records')
 
 
 def freight_report_columns():

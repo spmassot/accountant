@@ -5,36 +5,30 @@ from flask import (
 )
 from os import getenv
 import logging
-import logging.handlers
 
 from views import index, load, generate
-import src.user
+import src.user as user
 from src.interfaces import s3
 from src.db import Database
 
 
 load_dotenv()
 application = Flask(__name__)
+
+application.logger.handlers = []
+application.logger.addHandler(logging.StreamHandler())
+
 application.secret_key = getenv('AUTH_KEY')
 session_timeout = int(getenv('SESSION_TIMEOUT_IN_MINUTES'))
 application.permanent_session_lifetime = timedelta(minutes=session_timeout)
 s3.initialize_bucket(getenv('FILE_BUCKET'))
 user.initialize_users()
 
-# Database.initialize()
+Database.initialize()
 
 modules = [index, load, generate]
 for module in modules:
     application.register_blueprint(module.routes)
-
-
-def log(msg):
-    logging.basicConfig(
-        format='%(asctime)s --- %(message)s',
-        datefmt='%m/%d/%Y %I:%M:%S %p',
-        level=logging.INFO
-    )
-    logging.info('%s', msg)
 
 
 def authorize(username, password):
