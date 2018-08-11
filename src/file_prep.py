@@ -100,7 +100,7 @@ def givens_columns():
 def prep_freight_report(freight_report):
 
     keep_columns = freight_report_columns()
-    frames = pd.read_excel(givens_file, sheet_name=None)
+    frames = pd.read_excel(freight_report, sheet_name=None)
 
     records = []
     for k, df in frames.items():
