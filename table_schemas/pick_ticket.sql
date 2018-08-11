@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS pick_ticket (
-	pick_ticket TEXT PRIMARY KEY,
+	pick_ticket TEXT UNIQUE,
 	accrual DECIMAL(12, 2),
 	adjustment DECIMAL(12, 2),
 	paid DECIMAL(12, 2),
