@@ -30,7 +30,7 @@ class Database:
         cls.engine.execute(f'USE {cls.dbname}')
         for table in listdir('table_schemas'):
             with open(f'./table_schemas/{table}') as schema:
-                c.execute(schema.read())
+                cls.engine.execute(schema.read())
         cls.connection.commit()
 
     @classmethod
