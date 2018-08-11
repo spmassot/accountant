@@ -27,7 +27,7 @@ class Database:
             pool_pre_ping=True
         )
         cls.engine.execute(f'CREATE DATABASE IF NOT EXISTS {cls.dbname}')
-        cls.engine.execute('USE {cls.dbname}')
+        cls.engine.execute(f'USE {cls.dbname}')
         for table in listdir('table_schemas'):
             with open(f'./table_schemas/{table}') as schema:
                 c.execute(schema.read())
