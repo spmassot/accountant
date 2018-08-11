@@ -116,7 +116,7 @@ def freight_report_columns():
         'MM': 'month',
         'YY': 'year',
         'Pick Ticket': 'pick_ticket',
-        'Order Number': 'order_number',
+        'Order': 'order_number',
         'Doc#': 'document_number',
         'Sales': 'sales',
         'Cost': 'cost',

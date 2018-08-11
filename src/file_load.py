@@ -7,7 +7,7 @@ def load_file(file_name, file_data, file_type):
     {
         'ups': load_ups_file,
         'givens': load_givens_file,
-        'freight_report': load_freight_report_file
+        'freight': load_freight_report_file
     }.get(file_type)(object_name, file_data)
 
 
