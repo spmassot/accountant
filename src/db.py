@@ -1,5 +1,10 @@
+from dotenv import load_dotenv
 from sqlalchemy import create_engine
 from os import listdir, getenv
+from datetime import datetime as dt
+from src.sql_constructor import Constructor
+
+load_dotenv()
 
 
 class Database:
@@ -8,40 +13,37 @@ class Database:
     host = getenv('RDS_HOSTNAME')
     port = getenv('RDS_PORT')
     dbname = getenv('RDS_DB_NAME')
+    conn_str = f'mysql+pymysql://{cls.user}:{cls.password}@{cls.host}:{cls.port}/{cls.dbname}'
 
     engine = None
+    qb = Constructor(dbname)
 
     @classmethod
     def get_engine(cls):
         if not cls.engine:
-            cls.engine = create_engine(
-                f'mysql+pymysql://{cls.user}:{cls.password}@{cls.host}:{cls.port}/{cls.dbname}',
-                pool_pre_ping=True
-            )
+            cls.engine = create_engine(cls.conn_str, pool_pre_ping=True)
         return cls.engine
 
     @classmethod
     def initialize(cls):
-        cls.engine = create_engine(
-            f'mysql+pymysql://{cls.user}:{cls.password}@{cls.host}:{cls.port}',
-            pool_pre_ping=True
-        )
-        cls.engine.execute(f'CREATE DATABASE IF NOT EXISTS {cls.dbname}')
-        cls.engine.execute(f'USE {cls.dbname}')
+        cls.execute_query(cls.qb.create_database())
+        cls.execute_query(cls.qb.use_database())
         for table in listdir('table_schemas'):
             with open(f'./table_schemas/{table}') as schema:
-                cls.engine.execute(schema.read())
+                cls.execute_query(schema.read())
 
     @classmethod
-    def insert_into_table(cls, table, record):
-        e = cls.get_engine()
-        e.execute(
-            f'''INSERT INTO {table} ({tuple(record.keys())}) VALUES ({tuple(record.values())})'''
-        )
+    def update_history(cls, table_name, file_name):
+        record = {'name': file_name, 'inserted_date': dt.now().date()}
+        cls.execute_query(cls.qb.insert_record(table_name, record))
 
     @classmethod
-    def update_table(cls, table, id_key, id_value, update_key, update_value):
+    def check_history(cls, table_name, file_name):
+        rslt = cls.execute_query(cls.qb.select(table_name, 'name', name=file_name))
+        if rslt: return True
+        return False
+
+    @classmethod
+    def execute_query(cls, query):
         e = cls.get_engine()
-        e.execute(
-            f'''UPDATE {table} SET {update_key} = {update_value} WHERE {id_key} = {id_value}'''
-        )
+        return e.execute(query)

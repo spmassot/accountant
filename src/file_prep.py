@@ -25,7 +25,7 @@ def prep_ups_file(ups_file):
     df = df[[*list(keep_columns.keys())]]
     df = df.rename(keep_columns, axis='columns')
 
-    return df.to_json(orient='records')
+    return df.to_dict(orient='records')
 
 
 def ups_columns():
@@ -75,14 +75,14 @@ def prep_givens_file(givens_file):
             df['location'] = name
             df = df[[*list(keep_columns.keys())]]
             df = df.rename(keep_columns, axis='columns')
-            flat_frames.extend(df.to_json(orient='records'))
+            flat_frames.extend(df.to_dict(orient='records'))
 
         elif name in adj_names:
             df = df.dropna(thresh=4)
             df['location'] = name.replace('Adjustments','').strip()
             df = df[[*list(keep_columns.keys())]]
             df = df.rename(keep_columns, axis='columns')
-            adj_frames.extend(df.to_json(orient='records'))
+            adj_frames.extend(df.to_dict(orient='records'))
 
     return (flat_frames, adj_frames)
 
@@ -108,7 +108,7 @@ def prep_freight_report(freight_report):
         df.rename(keep_columns, axis='columns')
         records.append(df)
 
-    return pd.concat(records).to_json(orient='records')
+    return pd.concat(records).to_dict(orient='records')
 
 
 def freight_report_columns():
