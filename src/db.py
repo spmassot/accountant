@@ -13,7 +13,7 @@ class Database:
     host = getenv('RDS_HOSTNAME')
     port = getenv('RDS_PORT')
     dbname = getenv('RDS_DB_NAME')
-    conn_str = f'mysql+pymysql://{cls.user}:{cls.password}@{cls.host}:{cls.port}/{cls.dbname}'
+    conn_str = f'mysql+pymysql://{user}:{password}@{host}:{port}/{dbname}'
 
     engine = None
     qb = Constructor(dbname)
