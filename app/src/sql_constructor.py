@@ -3,7 +3,7 @@ from pypika import Query, Table
 class Constructor:
     def __init__(self, db_name):
         self.dbname = db_name
-    
+
     def create_database(self):
         return f'CREATE DATABASE IF NOT EXISTS {self.dbname}'
 

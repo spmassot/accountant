@@ -1,0 +1,15 @@
+version: "3.6"
+
+services:
+  webserver:
+    build:
+      context: .
+      target: release
+    command: bash -c "python3 application.py"
+    restart: on-failure
+    volumes:
+      - ./app:/app
+    environment:
+      - SESSION_TIMEOUT_IN_MINUTES=120
+    stdin_open: true
+    tty: true
