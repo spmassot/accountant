@@ -8,11 +8,11 @@ load_dotenv()
 
 
 class Database:
-    user = getenv('RDS_USERNAME')
-    password = getenv('RDS_PASSWORD')
-    host = getenv('RDS_HOSTNAME')
-    port = getenv('RDS_PORT')
-    dbname = getenv('RDS_DB_NAME')
+    user = getenv('DB_USER')
+    password = getenv('DB_PASSWORD')
+    host = getenv('DB_HOST')
+    port = getenv('DB_PORT')
+    dbname = getenv('DB_NAME')
     conn_str = f'mysql+pymysql://{user}:{password}@{host}:{port}/{dbname}'
 
     engine = None

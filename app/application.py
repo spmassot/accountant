@@ -24,7 +24,7 @@ application.permanent_session_lifetime = timedelta(minutes=session_timeout)
 s3.initialize_bucket(getenv('FILE_BUCKET'))
 user.initialize_users()
 
-Database.initialize()
+# Database.initialize()
 
 modules = [index, load, generate]
 for module in modules:
@@ -75,4 +75,4 @@ def logout():
 
 
 if __name__ == '__main__':
-    application.run()
+    application.run(host='0.0.0.0', port=5000, debug=True, threaded=True)
