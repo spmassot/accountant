@@ -9,7 +9,31 @@ services:
     restart: on-failure
     volumes:
       - ./app:/app
+    depends_on:
+      - db
     environment:
       - SESSION_TIMEOUT_IN_MINUTES=120
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_NAME=freight
+      - DB_USER=voxx_user
+      - DB_PASSWORD=password
     stdin_open: true
     tty: true
+
+  db:
+    image: mysql:latest
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: freight
+      MYSQL_USER: voxx_user
+      MYSQL_PASSWORD: password
+
+  flyway:
+    image: boxfuse/flyway
+    command: -url=jdbc:mysql://db/freight -locations='filesystem:/flyway/sql/' -user=voxx_user -password=password migrate
+    volumes:
+      - .:/flyway/sql
+    depends_on:
+      - db
