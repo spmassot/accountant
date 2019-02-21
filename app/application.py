@@ -23,7 +23,6 @@ application.permanent_session_lifetime = timedelta(minutes=session_timeout)
 s3.initialize_bucket(getenv('FILE_BUCKET'))
 user.initialize_users()
 
-
 modules = [index, load, generate]
 for module in modules:
     application.register_blueprint(module.routes)
