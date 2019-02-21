@@ -8,11 +8,11 @@ load_dotenv()
 
 
 class Database:
-    user = getenv('RDS_USERNAME')
-    password = getenv('RDS_PASSWORD')
-    host = getenv('RDS_HOSTNAME')
-    port = getenv('RDS_PORT')
-    dbname = getenv('RDS_DB_NAME')
+    user = getenv('DB_USER')
+    password = getenv('DB_PASSWORD')
+    host = getenv('DB_HOST')
+    port = getenv('DB_PORT')
+    dbname = getenv('DB_NAME')
     conn_str = f'mysql+pymysql://{user}:{password}@{host}:{port}/{dbname}'
 
     engine = None
@@ -23,14 +23,6 @@ class Database:
         if not cls.engine:
             cls.engine = create_engine(cls.conn_str, pool_pre_ping=True)
         return cls.engine
-
-    @classmethod
-    def initialize(cls):
-        cls.execute_query(cls.qb.create_database())
-        cls.execute_query(cls.qb.use_database())
-        for table in listdir('table_schemas'):
-            with open(f'./table_schemas/{table}') as schema:
-                cls.execute_query(schema.read())
 
     @classmethod
     def update_history(cls, table_name, file_name):
