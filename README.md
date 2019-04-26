@@ -1,4 +1,4 @@
 # accountant
 a web app that does some monthly close stuff
 
-just run make serve!
+just run `make serve`!
