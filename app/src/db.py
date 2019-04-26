@@ -31,7 +31,7 @@ class Database:
 
     @classmethod
     def check_history(cls, table_name, file_name):
-        rslt = cls.execute_query(cls.qb.select(table_name, 'name', name=file_name))
+        rslt = cls.execute_query(cls.qb.select(table_name, ('name',), name=file_name)).fetchone()
         if rslt: return True
         return False
 

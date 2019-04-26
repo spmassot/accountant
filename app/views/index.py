@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template
 
+
 routes = Blueprint('index', __name__)
 
 

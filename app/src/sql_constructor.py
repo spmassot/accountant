@@ -1,4 +1,4 @@
-from pypika import Query, Table
+from pypika import MySQLQuery as Query, Table
 
 class Constructor:
     def __init__(self, db_name):
@@ -24,7 +24,7 @@ class Constructor:
             tuple(record.values())
             for record in records
         )
-        q = Query.into(table).columns(*columns).insert(values)
+        q = Query.into(table).columns(*columns).insert(*values)
         return q.get_sql()
 
     def update_record(self, table, record, **where_values):

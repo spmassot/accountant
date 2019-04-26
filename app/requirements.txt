@@ -44,3 +44,4 @@ sqlalchemy
 PyMySQL
 pypika
 cryptography
+openpyxl

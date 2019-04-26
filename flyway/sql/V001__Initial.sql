@@ -83,3 +83,20 @@ CREATE TABLE IF NOT EXISTS ups_invoice_row (
   package_reference_number_5 TEXT,
   net_amount DECIMAL(12, 2)
 );
+
+CREATE TABLE IF NOT EXISTS transplace_invoice (
+  name TEXT,
+  inserted_date DATE
+);
+
+CREATE TABLE IF NOT EXISTS transplace_invoice_row (
+  invoice_number TEXT,
+  invoice_date DATE,
+  primary_reference_number TEXT,
+  ship_date DATE,
+  carrier_name TEXT,
+  shipper_name TEXT,
+  shipment_type TEXT,
+  warehouse TEXT,
+  total DECIMAL(12, 2)
+);

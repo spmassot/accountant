@@ -11,5 +11,4 @@ def index():
 
 @routes.route('/new', methods=['POST'])
 def handle_new():
-    print('doin dings')
     return render_template('index.html')

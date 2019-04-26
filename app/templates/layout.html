@@ -7,14 +7,14 @@
     <title>Freight - {% block title %}{% endblock %}</title>
   </head>
   {% with messages = get_flashed_messages() %}
-  {% if messages %}
+    {% if messages %}
       {% for message in messages %}
-      <div class="alert alert-warning">{{ message }}</div>
+        <div class="alert alert-warning">{{ message }}</div>
       {% endfor %}
-  {% endif %}
+    {% endif %}
   {% endwith %}
   <body id="body-main">
-      {% include 'navbar.html' %}
-      {% block body %}{% endblock %}
+    {% include 'navbar.html' %}
+    {% block body %}{% endblock %}
   </body>
 </html>

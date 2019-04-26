@@ -1,7 +1,7 @@
 import pandas as pd
 from xlsxmetadata.metadata import get_sheet_names
 from io import BytesIO
-import xlrd
+from openpyxl import load_workbook
 import re
 
 
@@ -14,18 +14,26 @@ def prep_file(ifile, file_type):
 
 
 def prep_ups_file(ups_file):
-
-    sheet_names = get_sheet_names(BytesIO(ups_file.read()))
-    ups_file.seek(0)
+    wb = load_workbook(
+        filename=BytesIO(ups_file.read()),
+        read_only=True,
+        data_only=True
+    )
     sought = re.compile(r'^\s*accruals*\s*$', re.I)
-    matched = [x for x in sheet_names if sought.match(x)][0]
-    df = pd.read_excel(ups_file, sheet_name=matched, usecols=55)
+    matched = [x for x in wb.sheetnames if sought.match(x)]
+    if not matched:
+        raise ValueError(f'There is no Accruals sheet; sheetnames: {wb.sheetnames}')
+    rows = wb[matched[0]].iter_rows(values_only=True)
 
     keep_columns = ups_columns()
-    df = df[[*list(keep_columns.keys())]]
-    df = df.rename(keep_columns, axis='columns')
-
-    return df.to_dict(orient='records')
+    header = next(rows)
+    return [
+        {
+            keep_columns[header[i]]: itm for i, itm in enumerate(row)
+            if header[i] in keep_columns
+        }
+        for row in rows
+    ][:-1]
 
 
 def ups_columns():
@@ -50,7 +58,6 @@ def ups_columns():
 
 
 def prep_givens_file(givens_file):
-
     sought = ['Brampton', 'Chesapeake','Plainfield','Reno','Hope']
     adj_sought = [x + ' Adjustments' for x in sought]
     keep_columns = givens_columns()
